@@ -35,14 +35,14 @@ use aws_sdk_rust::aws::common::region::Region;
 use aws_sdk_rust::aws::s3::endpoint::{Endpoint, Signature};
 use aws_sdk_rust::aws::s3::s3client::S3Client;
 
-use crate::awss3_opt::Awss3Opt;
+use crate::client_opt::ClientOpt;
 use std::io::Result;
 
 pub struct Awss3Client {
     field: S3Client<AutoRefreshingProvider<ChainProvider>, Client>,
 }
 
-impl Awss3Opt for Awss3Client {
+impl ClientOpt for Awss3Client {
     fn new(       
         access_key_id: &str,
         access_key_secret: &str,
@@ -50,6 +50,7 @@ impl Awss3Opt for Awss3Client {
         end_point: &str,
         proxy: &str,
         user_agent: &str,
+        sig_type: &str,
         is_bucket_vt: bool,
     ) -> Self {
 
@@ -74,9 +75,10 @@ impl Awss3Opt for Awss3Client {
             len => Some(user_agent.to_string()),    
         };
 
+        let sig_type: Signature = if sig_type == "V2" {Signature::V2} else {Signature::V4};
         let endpoint = Endpoint::new(
             Region::UsEast1, 
-            Signature::V4, 
+            sig_type, 
             Some(url::Url::parse(&end_point).unwrap()), 
             proxy, 
             user_agent, 

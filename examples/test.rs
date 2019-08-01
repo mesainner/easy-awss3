@@ -1,6 +1,6 @@
 extern crate easy_awss3;
-use easy_awss3::awss3_client::Awss3Client;
-use easy_awss3::awss3_opt::Awss3Opt;
+use easy_awss3::awss3::s3::Awss3Client;
+use easy_awss3::client_opt::ClientOpt;
 
 use std::str;
 
@@ -13,25 +13,27 @@ fn main() {
         "http://s3.bj.bcebos.com",
         "here is the proxy",
         "here is the user_agent",
-        false,
+        "V2/V4",
+        true,
     );
 
-    let sdf = tec.read_object_to_mem("bucket", "object", 0, 40).unwrap();
+    let sdf = tec.read_object_to_mem("ssssss", "123", 0, 40).unwrap();
     println!("\n\n{:#?}\n\n", str::from_utf8(&sdf).unwrap());
 
-    tec.write_object_with_mem("bucket", "object", "datas".as_bytes()).unwrap();
-    let listobjects = tec.list_objects("bucket").unwrap();
+    tec.write_object_with_mem("test-1259750376", "1234", "datas".as_bytes()).unwrap();
+    let listobjects = tec.list_objects("test-1259750376").unwrap();
     println!("{:?}", listobjects);
-    tec.delete_object("bucket", "object").unwrap();
-
-    let ret_str = tec.query_object_info("bucket", "object").unwrap();
-
-    let mut dwc: f32 = 0.0;
-    tec.write_object_with_file("bucket", "object", "file path", &mut dwc).unwrap();
+    let del = tec.delete_object("test-1259750376", "1234").unwrap();
+    println!("{:?}", del);
+    
+    let ret_str = tec.query_object_info("test-1259750376", "123").unwrap();
     println!("{:?}", ret_str);
 
-    let dex = tec.read_object_to_file("bucket", "object", "local file path", &mut dwc).unwrap();
+    let mut dwc: f32 = 0.0;
+    let dex = tec.read_object_to_file("test-1259750376", "1234", "a.txt", &mut dwc).unwrap();
     println!("{:?}", dex);
+
+    tec.write_object_with_file("test-1259750376", "1234", "a.txt", &mut dwc).unwrap();
 
     println!("xxxxxxxxsdf");
 }

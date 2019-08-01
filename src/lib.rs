@@ -1,2 +1,2 @@
-pub mod awss3_client;
-pub mod awss3_opt;
+pub mod awss3;
+pub mod client_opt;

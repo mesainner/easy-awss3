@@ -1,6 +1,6 @@
 use std::io::Result;
 
-pub trait Awss3Opt {
+pub trait ClientOpt {
     fn new(
         access_key_id: &str,
         access_key_secret: &str,
@@ -8,6 +8,7 @@ pub trait Awss3Opt {
         end_point: &str,
         proxy: &str,
         user_agent: &str,
+        sig_type: &str,
         is_bucket_vt: bool,
     ) -> Self;
 
